@@ -1,9 +1,8 @@
 
 M68K_CPU ?= 5213
-M68K_ARCH ?= isaaplus
 
 # Some useful flags for microcontroller development
-M68K_BOTHFLAGS ?= -fshort-enums -funsigned-char -funsigned-bitfields -mcpu=$(M68K_CPU) -march=$(M68K_ARCH) \
+M68K_BOTHFLAGS ?= -fshort-enums -funsigned-char -funsigned-bitfields -mcpu=$(M68K_CPU) \
   -DMOD$(M68K_CPU) -DMCF$(M68K_CPU) -Os
 M68K_CFLAGS ?= -std=gnu99
 M68K_CXXFLAGS ?= -fno-exceptions -std=gnu++11
