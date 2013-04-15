@@ -30,11 +30,14 @@ $(M68K_EXT_LISTING): $(M68KPROJ)
 $(M68K_HEX): $(M68KPROJ)
 	@echo OBJCOPY $(notdir $<)
 	$(M68K_OBJCOPY) -R .eeprom -O ihex $(M68KPROJ) $(M68K_HEX)
-	
+
+$(M68KPROJ): $(PROJ)
+	@echo ELF $(notdir $<)
+	$(M68K_OBJCOPY) $< --strip-all --output-target=srec $@
+
 $(M68K_SREC): $(M68KPROJ)
-  @echo SREC $(notdir $<)
-  $(M68K_OBJCOPY) $< --strip-all --output-target=srec $@
-  $(PACKCODE) $@ $@ -R 0xFFC04000 0xFFC3E000 -PMOD$(M68K_CPU)
+	@echo SREC $(notdir $<)
+	$(M68K_PACKCODE) $< $@ -R 0xFFC04000 0xFFC3E000 -PMOD$(M68K_CPU)
   
 m68k-sizedummy: $(M68KPROJ)
 	@echo M68K-SIZE $(notdir $<)
