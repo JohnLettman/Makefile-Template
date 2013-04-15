@@ -44,13 +44,13 @@ TESTS_SRC ?=
 # lots of people use .cpp instead.
 CXX_EXT = cc
 
-MKFILE_DIR ?= /home/peddie/programming/Makefile/
+MKFILE_DIR ?= make
 
-include $(MKFILE_DIR)common_head.mk
-include $(MKFILE_DIR)native.mk
-include $(MKFILE_DIR)build.mk
-include $(MKFILE_DIR)test.mk
-include $(MKFILE_DIR)syntax.mk
-include $(MKFILE_DIR)clean.mk
-include $(MKFILE_DIR)docs.mk
-include $(MKFILE_DIR)common_tail.mk
+include $(MKFILE_DIR)/common_head.mk
+include $(MKFILE_DIR)/native.mk
+include $(MKFILE_DIR)/build.mk
+include $(MKFILE_DIR)/test.mk
+include $(MKFILE_DIR)/syntax.mk
+include $(MKFILE_DIR)/clean.mk
+include $(MKFILE_DIR)/docs.mk
+include $(MKFILE_DIR)/common_tail.mk
