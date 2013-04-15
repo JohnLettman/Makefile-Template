@@ -11,12 +11,15 @@ M68K_CXXFLAGS ?= -fno-exceptions -std=gnu++11
 M68KPROJ ?= $(PROJ:%=%.elf)
 M68K_EXT_LISTING ?= $(M68KPROJ:%.elf=%.lss)
 M68K_HEX ?= $(M68KPROJ:%.elf=%.hex)
+M68K_SREC ?= $(M68KPROJ:%.elf=%_APP.s19)
 
 # Compiler setup
 M68K_PREFIX = m68k-elf
 M68K_CC = $(M68K_PREFIX)-gcc
 M68K_CXX = $(M68K_PREFIX)-g++
 M68K_AR = $(M68K_PREFIX)-ar
+M68K_OBJCOPY = $(M68K_PREFIX)-objcopy
+M68K_PACKCODE = packcode
 
 .PHONY: m68k-lss m68k-hex m68k-ihex m68k-sizedummy m68k-subs m68k-all flash
 
@@ -26,8 +29,13 @@ $(M68K_EXT_LISTING): $(M68KPROJ)
 
 $(M68K_HEX): $(M68KPROJ)
 	@echo OBJCOPY $(notdir $<)
-	$(M68K_PREFIX)-objcopy -R .eeprom -O ihex $(M68KPROJ) $(M68K_HEX)
-
+	$(M68K_OBJCOPY) -R .eeprom -O ihex $(M68KPROJ) $(M68K_HEX)
+	
+$(M68K_SREC): $(M68KPROJ)
+  @echo SREC $(notdir $<)
+  $(M68K_OBJCOPY) $< --strip-all --output-target=srec $@
+  $(PACKCODE) $@ $@ -R 0xFFC04000 0xFFC3E000 -PMOD$(M68K_CPU)
+  
 m68k-sizedummy: $(M68KPROJ)
 	@echo M68K-SIZE $(notdir $<)
 	$(M68K_PREFIX)-size --mcpu=$(M68K_CPU) $(M68KPROJ)
@@ -37,6 +45,7 @@ m68k-subs: m68k-lss m68k-hex m68k-sizedummy
 m68k-lss: $(M68K_EXT_LISTING)
 m68k-hex: $(M68K_HEX)
 m68k-ihex: $(M68K_HEX)
+m68k-srec: $(M68K_SREC)
 
 # The default here is to use the AVRISP mkII.  Be sure to change the
 # settings for other programmers.

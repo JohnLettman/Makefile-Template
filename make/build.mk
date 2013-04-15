@@ -64,6 +64,15 @@ else
 endif
 
 .SECONDEXPANSION:
+$(M68KPROJ): %.elf : $$(findstring $$(*:%=%.o),$(OBJ)) $(filter-out $(PROJ:%=%.o),$(OBJ))
+	@echo LD $@
+ifneq (,$(CXX_SRC))
+	$(Q)$(CXX) $^ $(LDFLAGS) -o $@
+else
+	$(Q)$(CC) $^ $(LDFLAGS) -o $@
+endif
+
+.SECONDEXPANSION:
 $(CM4_PROJ): %.elf : $$(findstring $$(*:%=%.o),$(OBJ)) $(filter-out $(PROJ:%=%.o),$(OBJ))
 	@echo LD $@
 ifneq (,$(CXX_SRC))
