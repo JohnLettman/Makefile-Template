@@ -30,7 +30,7 @@ $(M68K_HEX): $(M68KPROJ)
 
 m68k-sizedummy: $(M68KPROJ)
 	@echo M68K-SIZE $(notdir $<)
-	$(M68K_PREFIX)-size --format=avr --mcu=$(M68K_MCU) $(M68KPROJ)
+	$(M68K_PREFIX)-size --mcpu=$(M68K_CPU) $(M68KPROJ)
 
 m68k-all: $(M68KPROJ) m68k-subs
 m68k-subs: m68k-lss m68k-hex m68k-sizedummy
