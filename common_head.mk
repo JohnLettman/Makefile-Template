@@ -1,4 +1,6 @@
 Q ?= @
+rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter 
+$(subst *,%,$2),$d))
 
 all: $(PROJ)
 .PHONY: all
@@ -9,6 +11,9 @@ UNAME_OS=$(shell uname -s)
 # What's the extension on C++ files?  .cc is the Google default, but
 # lots of people use .cpp instead.
 CXX_EXT ?= cc
+
+SRC ?= $(call rwildcard,src,*.$(CXX_EXT)) + $(call rwildcard,src,*.c)
+
 
 C_SRC = $(filter %.c,$(SRC))
 CXX_SRC = $(filter %.$(CXX_EXT),$(SRC))
